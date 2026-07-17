@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://polyhydra-games.github.io/palworld-save-facts-contracts/schema/palworld-save-facts.v1.schema.json",
+  "title": "Palworld Save Facts v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "observedAt", "players", "guildCount", "baseCount", "palCount"],
+  "properties": {
+    "schemaVersion": { "const": "palworld-save-facts/v1" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "players": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/player" }
+    },
+    "guildCount": { "type": "integer", "minimum": 0 },
+    "baseCount": { "type": "integer", "minimum": 0 },
+    "palCount": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "player": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nativeId", "level", "recipes", "completedQuests", "technologyPoints", "guildId"],
+      "properties": {
+        "nativeId": { "type": "string", "minLength": 1 },
+        "level": { "type": "integer", "minimum": 0 },
+        "recipes": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "completedQuests": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "technologyPoints": { "type": "integer", "minimum": 0 },
+        "guildId": { "type": ["string", "null"], "minLength": 1 }
+      }
+    }
+  }
+}
