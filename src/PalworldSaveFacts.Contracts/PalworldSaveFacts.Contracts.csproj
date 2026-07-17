@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>PolyhydraGames.PalworldSaveFacts.Contracts</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Polyhydra Games</Authors>
+    <Description>Permissive wire contracts for privacy-safe Palworld save facts.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Polyhydra-Games/palworld-save-facts-contracts</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" Link="README.md" />
+    <None Include="../../schema/palworld-save-facts.v1.schema.json" Pack="true" PackagePath="schema/" Link="schema/palworld-save-facts.v1.schema.json" />
+  </ItemGroup>
+</Project>
