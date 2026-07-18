@@ -43,7 +43,11 @@ jobs:
       - name: Publish to NuGet.org
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: dotnet nuget push 'release/*.nupkg' --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
+        run: |
+          test -n "$NUGET_API_KEY"
+          mapfile -t packages < <(find release -type f -name '*.nupkg' | sort)
+          test "${#packages[@]}" -eq 1
+          dotnet nuget push "${packages[0]}" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag }}
