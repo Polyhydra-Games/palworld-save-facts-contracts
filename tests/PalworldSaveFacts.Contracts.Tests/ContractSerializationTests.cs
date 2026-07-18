@@ -124,12 +124,68 @@ public sealed class ContractSerializationTests
     [Fact]
     public void No_normalized_v2_property_is_raw_only()
     {
-        var rawOnlyProperties = typeof(SaveFactsDocumentV2)
-            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(property => property.GetCustomAttribute<FactClassificationAttribute>()?.Sensitivity == FactSensitivity.RawOnly)
-            .Select(property => property.Name)
-            .ToArray();
+        var rawOnlyProperties = FindRawOnlyProperties(typeof(SaveFactsDocumentV2));
 
         Assert.Empty(rawOnlyProperties);
+    }
+
+    private static IReadOnlyList<string> FindRawOnlyProperties(Type rootType)
+    {
+        var contractNamespace = typeof(SaveFactsDocumentV2).Namespace;
+        var pending = new Stack<Type>();
+        var visited = new HashSet<Type>();
+        var rawOnlyProperties = new List<string>();
+        pending.Push(rootType);
+
+        while (pending.TryPop(out var type))
+        {
+            type = UnwrapContractType(type);
+            if (!visited.Add(type) || type.Namespace != contractNamespace)
+            {
+                continue;
+            }
+
+            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (property.GetCustomAttribute<JsonPropertyNameAttribute>() is null)
+                {
+                    continue;
+                }
+
+                if (property.GetCustomAttribute<FactClassificationAttribute>()?.Sensitivity == FactSensitivity.RawOnly)
+                {
+                    rawOnlyProperties.Add($"{type.Name}.{property.Name}");
+                }
+
+                pending.Push(property.PropertyType);
+            }
+        }
+
+        return rawOnlyProperties;
+    }
+
+    private static Type UnwrapContractType(Type type)
+    {
+        if (Nullable.GetUnderlyingType(type) is { } nullableType)
+        {
+            return nullableType;
+        }
+
+        if (type.IsArray)
+        {
+            return type.GetElementType()!;
+        }
+
+        if (type.IsGenericType)
+        {
+            var contractType = type.GetGenericArguments()
+                .FirstOrDefault(candidate => candidate.Namespace == typeof(SaveFactsDocumentV2).Namespace);
+            if (contractType is not null)
+            {
+                return contractType;
+            }
+        }
+
+        return type;
     }
 }
