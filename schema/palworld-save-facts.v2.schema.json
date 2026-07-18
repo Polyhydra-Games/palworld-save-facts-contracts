@@ -12,7 +12,8 @@
     "provenance",
     "completeness",
     "warnings",
-    "domainCounts"
+    "domainCounts",
+    "players"
   ],
   "properties": {
     "schemaVersion": { "const": "palworld-save-facts/v2" },
@@ -48,6 +49,53 @@
     "domainCounts": {
       "type": "object",
       "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "players": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/player" }
+    }
+  },
+  "$defs": {
+    "fieldState": { "type": "string", "enum": ["present", "absent", "unknown"] },
+    "stringField": {
+      "type": "object", "additionalProperties": false, "required": ["state", "value"],
+      "properties": { "state": { "$ref": "#/$defs/fieldState" }, "value": { "type": ["string", "null"] } }
+    },
+    "integerField": {
+      "type": "object", "additionalProperties": false, "required": ["state", "value"],
+      "properties": { "state": { "$ref": "#/$defs/fieldState" }, "value": { "type": ["integer", "null"] } }
+    },
+    "stringListField": {
+      "type": "object", "additionalProperties": false, "required": ["state", "values"],
+      "properties": { "state": { "$ref": "#/$defs/fieldState" }, "values": { "type": "array", "items": { "type": "string" } } }
+    },
+    "timestampField": {
+      "type": "object", "additionalProperties": false, "required": ["state", "value"],
+      "properties": { "state": { "$ref": "#/$defs/fieldState" }, "value": { "type": ["string", "null"], "format": "date-time" } }
+    },
+    "reference": {
+      "type": "object", "additionalProperties": false, "required": ["snapshotLocalId"],
+      "properties": { "snapshotLocalId": { "type": "string", "minLength": 1 } }
+    },
+    "positionField": {
+      "type": "object", "additionalProperties": false, "required": ["state", "value"],
+      "properties": {
+        "state": { "$ref": "#/$defs/fieldState" },
+        "value": { "type": ["object", "null"], "additionalProperties": false,
+          "required": ["x", "y", "z"], "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "z": { "type": "number" } } }
+      }
+    },
+    "player": {
+      "type": "object", "additionalProperties": false,
+      "required": ["snapshotLocalId", "nativeId", "displayName", "guild", "level", "experience", "points", "technology", "recipes", "quests", "lastOnline", "inventoryReferences", "equipmentReferences", "position", "state"],
+      "properties": {
+        "snapshotLocalId": { "type": "string", "minLength": 1 },
+        "nativeId": { "$ref": "#/$defs/stringField" }, "displayName": { "$ref": "#/$defs/stringField" }, "guild": { "$ref": "#/$defs/stringField" },
+        "level": { "$ref": "#/$defs/integerField" }, "experience": { "$ref": "#/$defs/integerField" }, "points": { "$ref": "#/$defs/integerField" },
+        "technology": { "$ref": "#/$defs/stringListField" }, "recipes": { "$ref": "#/$defs/stringListField" }, "quests": { "$ref": "#/$defs/stringListField" },
+        "lastOnline": { "$ref": "#/$defs/timestampField" }, "inventoryReferences": { "type": "array", "items": { "$ref": "#/$defs/reference" } },
+        "equipmentReferences": { "type": "array", "items": { "$ref": "#/$defs/reference" } }, "position": { "$ref": "#/$defs/positionField" }, "state": { "$ref": "#/$defs/stringField" }
+      }
     }
   }
 }

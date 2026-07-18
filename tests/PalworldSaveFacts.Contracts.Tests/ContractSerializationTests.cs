@@ -57,12 +57,31 @@ public sealed class ContractSerializationTests
                 ["players"] = 1,
                 ["guilds"] = 3,
                 ["pals"] = 18
-            });
+            },
+            Players:
+            [
+                new SaveFactsPlayerV2(
+                    SnapshotLocalId: "player:1",
+                    NativeId: new(SaveFactsSourceFieldState.Present, "native-1"),
+                    DisplayName: new(SaveFactsSourceFieldState.Present, "Example"),
+                    Guild: new(SaveFactsSourceFieldState.Absent, null),
+                    Level: new(SaveFactsSourceFieldState.Present, 42),
+                    Experience: new(SaveFactsSourceFieldState.Unknown, null),
+                    Points: new(SaveFactsSourceFieldState.Present, 7),
+                    Technology: new(SaveFactsSourceFieldState.Present, ["TechA"]),
+                    Recipes: new(SaveFactsSourceFieldState.Present, ["RecipeA"]),
+                    Quests: new(SaveFactsSourceFieldState.Absent, []),
+                    LastOnline: new(SaveFactsSourceFieldState.Unknown, null),
+                    InventoryReferences: [],
+                    EquipmentReferences: [],
+                    Position: new(SaveFactsSourceFieldState.Absent, null),
+                    State: new(SaveFactsSourceFieldState.Present, "Alive"))
+            ]);
 
         var json = JsonSerializer.Serialize(snapshot, SaveFactsJson.SerializerOptions);
 
         Assert.Equal("""
-            {"schemaVersion":"palworld-save-facts/v2","snapshotId":"snapshot-20260718-001","sourceDigest":"sha256:abc123","observedAt":"2026-07-18T12:30:00+00:00","provenance":{"parserVersion":"1.2.3","decoderVersion":"4.5.6","gameVersion":"0.4.2.0"},"completeness":"partial","warnings":[{"code":"missing-dungeon","message":"Dungeon family was not present in the source snapshot."}],"domainCounts":{"players":1,"guilds":3,"pals":18}}
+            {"schemaVersion":"palworld-save-facts/v2","snapshotId":"snapshot-20260718-001","sourceDigest":"sha256:abc123","observedAt":"2026-07-18T12:30:00+00:00","provenance":{"parserVersion":"1.2.3","decoderVersion":"4.5.6","gameVersion":"0.4.2.0"},"completeness":"partial","warnings":[{"code":"missing-dungeon","message":"Dungeon family was not present in the source snapshot."}],"domainCounts":{"players":1,"guilds":3,"pals":18},"players":[{"snapshotLocalId":"player:1","nativeId":{"state":"present","value":"native-1"},"displayName":{"state":"present","value":"Example"},"guild":{"state":"absent","value":null},"level":{"state":"present","value":42},"experience":{"state":"unknown","value":null},"points":{"state":"present","value":7},"technology":{"state":"present","values":["TechA"]},"recipes":{"state":"present","values":["RecipeA"]},"quests":{"state":"absent","values":[]},"lastOnline":{"state":"unknown","value":null},"inventoryReferences":[],"equipmentReferences":[],"position":{"state":"absent","value":null},"state":{"state":"present","value":"Alive"}}]}
             """, json);
     }
 
