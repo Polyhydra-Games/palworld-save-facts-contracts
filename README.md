@@ -10,17 +10,27 @@ the decoder's JSON output without linking the decoder into their process.
 
 ## Contract
 
-`palworld-save-facts/v1` is a single JSON document written to standard output
-for one completed save snapshot. It includes only the raw, private-boundary
-facts needed by an operator-owned projector:
+`palworld-save-facts/v1` remains the compact stdout snapshot contract for the
+legacy projector path.
 
-- native player IDs, levels, unlocked recipes and quests, technology points,
-  and optional guild IDs;
-- aggregate guild, base, and Pal counts; and
-- the operator-supplied observation time.
+`palworld-save-facts/v2` is the normalized snapshot envelope. It carries the
+metadata needed to retain, classify, and correlate snapshots without baking the
+decoder into consumers:
 
-Consumers must treat every value as private input. Pseudonymization,
-allowlisting, retention, and public projections belong outside the decoder.
+- snapshot ID and source digest;
+- observation time;
+- parser, decoder, and game versions;
+- completeness state and warnings; and
+- per-domain counts for the retained snapshot.
+
+`palworld-save-decode-manifest/v1` is the private raw-artifact manifest. It
+records the raw output path, size, hash, compression, and decoder provenance so
+the sidecar can retain and audit the raw decode without exposing it as the
+normal output.
+
+Consumers must treat every value as private input unless the contract marks it
+public. Pseudonymization, allowlisting, retention, and public projections
+belong outside the decoder.
 
 ## Development
 
@@ -30,5 +40,7 @@ dotnet pack -c Release
 ```
 
 The authoritative machine-readable contract is
-[`schema/palworld-save-facts.v1.schema.json`](schema/palworld-save-facts.v1.schema.json).
-Permissive wire contracts and JSON schemas for privacy-safe Palworld save facts
+[`schema/palworld-save-facts.v1.schema.json`](schema/palworld-save-facts.v1.schema.json),
+[`schema/palworld-save-facts.v2.schema.json`](schema/palworld-save-facts.v2.schema.json),
+and [`schema/palworld-save-decode-manifest.v1.schema.json`](schema/palworld-save-decode-manifest.v1.schema.json).
+Permissive wire contracts and JSON schemas for privacy-safe Palworld save facts.

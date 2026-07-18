@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://polyhydra-games.github.io/palworld-save-facts-contracts/schema/palworld-save-decode-manifest.v1.schema.json",
+  "title": "Palworld Save Decode Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "snapshotId",
+    "sourceDigest",
+    "observedAt",
+    "provenance",
+    "completeness",
+    "warnings",
+    "rawArtifact"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "palworld-save-decode-manifest/v1" },
+    "snapshotId": { "type": "string", "minLength": 1 },
+    "sourceDigest": { "type": "string", "minLength": 1 },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parserVersion", "decoderVersion", "gameVersion"],
+      "properties": {
+        "parserVersion": { "type": "string", "minLength": 1 },
+        "decoderVersion": { "type": "string", "minLength": 1 },
+        "gameVersion": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "completeness": {
+      "type": "string",
+      "enum": ["complete", "partial", "incomplete", "unknown"]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "rawArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "byteCount", "sha256", "compression", "contentType"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "byteCount": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "minLength": 1 },
+        "compression": { "type": "string", "minLength": 1 },
+        "contentType": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

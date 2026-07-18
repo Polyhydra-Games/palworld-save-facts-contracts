@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://polyhydra-games.github.io/palworld-save-facts-contracts/schema/palworld-save-facts.v2.schema.json",
+  "title": "Palworld Save Facts v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "snapshotId",
+    "sourceDigest",
+    "observedAt",
+    "provenance",
+    "completeness",
+    "warnings",
+    "domainCounts"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "palworld-save-facts/v2" },
+    "snapshotId": { "type": "string", "minLength": 1 },
+    "sourceDigest": { "type": "string", "minLength": 1 },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parserVersion", "decoderVersion", "gameVersion"],
+      "properties": {
+        "parserVersion": { "type": "string", "minLength": 1 },
+        "decoderVersion": { "type": "string", "minLength": 1 },
+        "gameVersion": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "completeness": {
+      "type": "string",
+      "enum": ["complete", "partial", "incomplete", "unknown"]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "domainCounts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    }
+  }
+}
