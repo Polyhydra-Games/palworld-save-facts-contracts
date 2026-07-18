@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>PolyhydraGames.PalworldSaveFacts.Contracts</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Polyhydra Games</Authors>
     <Description>Permissive wire contracts for privacy-safe Palworld save facts.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
