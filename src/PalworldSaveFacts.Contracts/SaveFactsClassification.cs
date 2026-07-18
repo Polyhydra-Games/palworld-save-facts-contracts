@@ -31,6 +31,15 @@ public enum SaveFactsSourceFieldState
     Unknown
 }
 
+public enum SaveFactsFamilyState
+{
+    Present,
+    Absent,
+    Unknown,
+    Unsupported,
+    Malformed
+}
+
 public sealed record SaveFactsStringFieldV1(
     [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Operator)] SaveFactsSourceFieldState State,
     [property: JsonPropertyName("value"), FactClassification(FactSensitivity.Restricted)] string? Value);
@@ -108,6 +117,37 @@ public sealed record SaveFactsPalV2(
     [property: JsonPropertyName("base"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Base,
     [property: JsonPropertyName("guild"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Guild);
 
+public sealed record SaveFactsFamilySupportV1(
+    [property: JsonPropertyName("family"), FactClassification(FactSensitivity.Operator)] string Family,
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Operator)] SaveFactsFamilyState State,
+    [property: JsonPropertyName("warningCode"), FactClassification(FactSensitivity.Operator)] string? WarningCode);
+
+public sealed record SaveFactsWorldEntityV2(
+    [property: JsonPropertyName("snapshotLocalId"), FactClassification(FactSensitivity.Operator)] string SnapshotLocalId,
+    [property: JsonPropertyName("kind"), FactClassification(FactSensitivity.Operator)] SaveFactsStringFieldV1 Kind,
+    [property: JsonPropertyName("name"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Name,
+    [property: JsonPropertyName("position"), FactClassification(FactSensitivity.Restricted)] SaveFactsPositionFieldV1 Position,
+    [property: JsonPropertyName("references"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsSnapshotReferenceV1> References,
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 State);
+
+public sealed record SaveFactsWorldV2(
+    [property: JsonPropertyName("families"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsFamilySupportV1> Families,
+    [property: JsonPropertyName("guilds"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Guilds,
+    [property: JsonPropertyName("settlements"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Settlements,
+    [property: JsonPropertyName("workers"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Workers,
+    [property: JsonPropertyName("facilities"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Facilities,
+    [property: JsonPropertyName("structures"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Structures,
+    [property: JsonPropertyName("containers"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Containers,
+    [property: JsonPropertyName("itemSlots"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> ItemSlots,
+    [property: JsonPropertyName("equipment"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Equipment,
+    [property: JsonPropertyName("mapObjects"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> MapObjects,
+    [property: JsonPropertyName("workState"), FactClassification(FactSensitivity.Restricted)] IReadOnlyList<SaveFactsWorldEntityV2> WorkState,
+    [property: JsonPropertyName("dungeons"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Dungeons,
+    [property: JsonPropertyName("camps"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> Camps,
+    [property: JsonPropertyName("invaders"), FactClassification(FactSensitivity.Restricted)] IReadOnlyList<SaveFactsWorldEntityV2> Invaders,
+    [property: JsonPropertyName("oilRigs"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> OilRigs,
+    [property: JsonPropertyName("supplySystems"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWorldEntityV2> SupplySystems);
+
 public sealed record SaveFactsWarningV1(
     [property: JsonPropertyName("code"), FactClassification(FactSensitivity.Operator)] string Code,
     [property: JsonPropertyName("message"), FactClassification(FactSensitivity.Operator)] string Message);
@@ -134,7 +174,8 @@ public sealed record SaveFactsDocumentV2(
     [property: JsonPropertyName("warnings"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWarningV1> Warnings,
     [property: JsonPropertyName("domainCounts"), FactClassification(FactSensitivity.Operator)] IReadOnlyDictionary<string, int> DomainCounts,
     [property: JsonPropertyName("players"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsPlayerV2> Players,
-    [property: JsonPropertyName("pals"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsPalV2> Pals);
+    [property: JsonPropertyName("pals"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsPalV2> Pals,
+    [property: JsonPropertyName("world"), FactClassification(FactSensitivity.Operator)] SaveFactsWorldV2 World);
 
 public sealed record SaveFactsDecodeManifestV1(
     [property: JsonPropertyName("schemaVersion"), FactClassification(FactSensitivity.Public)] string SchemaVersion,
