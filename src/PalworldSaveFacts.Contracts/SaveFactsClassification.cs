@@ -24,6 +24,58 @@ public enum SaveFactsCompletenessState
     Unknown
 }
 
+public enum SaveFactsSourceFieldState
+{
+    Present,
+    Absent,
+    Unknown
+}
+
+public sealed record SaveFactsStringFieldV1(
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Operator)] SaveFactsSourceFieldState State,
+    [property: JsonPropertyName("value"), FactClassification(FactSensitivity.Restricted)] string? Value);
+
+public sealed record SaveFactsIntegerFieldV1(
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Operator)] SaveFactsSourceFieldState State,
+    [property: JsonPropertyName("value"), FactClassification(FactSensitivity.Operator)] long? Value);
+
+public sealed record SaveFactsTimestampFieldV1(
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Operator)] SaveFactsSourceFieldState State,
+    [property: JsonPropertyName("value"), FactClassification(FactSensitivity.Restricted)] DateTimeOffset? Value);
+
+public sealed record SaveFactsStringListFieldV1(
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Operator)] SaveFactsSourceFieldState State,
+    [property: JsonPropertyName("values"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<string> Values);
+
+public sealed record SaveFactsSnapshotReferenceV1(
+    [property: JsonPropertyName("snapshotLocalId"), FactClassification(FactSensitivity.Operator)] string SnapshotLocalId);
+
+public sealed record SaveFactsPositionV1(
+    [property: JsonPropertyName("x"), FactClassification(FactSensitivity.Restricted)] double X,
+    [property: JsonPropertyName("y"), FactClassification(FactSensitivity.Restricted)] double Y,
+    [property: JsonPropertyName("z"), FactClassification(FactSensitivity.Restricted)] double Z);
+
+public sealed record SaveFactsPositionFieldV1(
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Operator)] SaveFactsSourceFieldState State,
+    [property: JsonPropertyName("value"), FactClassification(FactSensitivity.Restricted)] SaveFactsPositionV1? Value);
+
+public sealed record SaveFactsPlayerV2(
+    [property: JsonPropertyName("snapshotLocalId"), FactClassification(FactSensitivity.Operator)] string SnapshotLocalId,
+    [property: JsonPropertyName("nativeId"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 NativeId,
+    [property: JsonPropertyName("displayName"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 DisplayName,
+    [property: JsonPropertyName("guild"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Guild,
+    [property: JsonPropertyName("level"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Level,
+    [property: JsonPropertyName("experience"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Experience,
+    [property: JsonPropertyName("points"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Points,
+    [property: JsonPropertyName("technology"), FactClassification(FactSensitivity.Operator)] SaveFactsStringListFieldV1 Technology,
+    [property: JsonPropertyName("recipes"), FactClassification(FactSensitivity.Operator)] SaveFactsStringListFieldV1 Recipes,
+    [property: JsonPropertyName("quests"), FactClassification(FactSensitivity.Operator)] SaveFactsStringListFieldV1 Quests,
+    [property: JsonPropertyName("lastOnline"), FactClassification(FactSensitivity.Restricted)] SaveFactsTimestampFieldV1 LastOnline,
+    [property: JsonPropertyName("inventoryReferences"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsSnapshotReferenceV1> InventoryReferences,
+    [property: JsonPropertyName("equipmentReferences"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsSnapshotReferenceV1> EquipmentReferences,
+    [property: JsonPropertyName("position"), FactClassification(FactSensitivity.Restricted)] SaveFactsPositionFieldV1 Position,
+    [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 State);
+
 public sealed record SaveFactsWarningV1(
     [property: JsonPropertyName("code"), FactClassification(FactSensitivity.Operator)] string Code,
     [property: JsonPropertyName("message"), FactClassification(FactSensitivity.Operator)] string Message);
@@ -48,7 +100,8 @@ public sealed record SaveFactsDocumentV2(
     [property: JsonPropertyName("provenance"), FactClassification(FactSensitivity.Operator)] SaveFactsDecoderProvenanceV1 Provenance,
     [property: JsonPropertyName("completeness"), FactClassification(FactSensitivity.Operator)] SaveFactsCompletenessState Completeness,
     [property: JsonPropertyName("warnings"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWarningV1> Warnings,
-    [property: JsonPropertyName("domainCounts"), FactClassification(FactSensitivity.Operator)] IReadOnlyDictionary<string, int> DomainCounts);
+    [property: JsonPropertyName("domainCounts"), FactClassification(FactSensitivity.Operator)] IReadOnlyDictionary<string, int> DomainCounts,
+    [property: JsonPropertyName("players"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsPlayerV2> Players);
 
 public sealed record SaveFactsDecodeManifestV1(
     [property: JsonPropertyName("schemaVersion"), FactClassification(FactSensitivity.Public)] string SchemaVersion,
