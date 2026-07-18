@@ -13,7 +13,7 @@
     "completeness",
     "warnings",
     "domainCounts",
-    "players", "pals"
+    "players", "pals", "world"
   ],
   "properties": {
     "schemaVersion": { "const": "palworld-save-facts/v2" },
@@ -57,7 +57,8 @@
     "pals": {
       "type": "array",
       "items": { "$ref": "#/$defs/pal" }
-    }
+    },
+    "world": { "$ref": "#/$defs/world" }
   },
   "$defs": {
     "fieldState": { "type": "string", "enum": ["present", "absent", "unknown"] },
@@ -110,6 +111,18 @@
         "ownershipObservedAt": { "$ref": "#/$defs/timestampField" }, "firstObservedAt": { "$ref": "#/$defs/timestampField" }, "level": { "$ref": "#/$defs/integerField" }, "experience": { "$ref": "#/$defs/integerField" }, "rank": { "$ref": "#/$defs/integerField" }, "gender": { "$ref": "#/$defs/stringField" }, "traits": { "$ref": "#/$defs/stringListField" }, "ivStats": { "type": "object", "additionalProperties": { "$ref": "#/$defs/integerField" } }, "souls": { "$ref": "#/$defs/integerField" }, "passiveSkills": { "$ref": "#/$defs/stringListField" }, "activeSkills": { "$ref": "#/$defs/stringListField" },
         "vitals": { "type": "object", "additionalProperties": false, "required": ["health", "sanity", "hunger", "friendship"], "properties": { "health": { "$ref": "#/$defs/integerField" }, "sanity": { "$ref": "#/$defs/integerField" }, "hunger": { "$ref": "#/$defs/integerField" }, "friendship": { "$ref": "#/$defs/integerField" } } },
         "workSuitability": { "$ref": "#/$defs/stringListField" }, "container": { "$ref": "#/$defs/stringField" }, "slot": { "$ref": "#/$defs/integerField" }, "party": { "$ref": "#/$defs/stringField" }, "palbox": { "$ref": "#/$defs/stringField" }, "base": { "$ref": "#/$defs/stringField" }, "guild": { "$ref": "#/$defs/stringField" }
+      }
+    },
+    "worldEntity": {
+      "type": "object", "additionalProperties": false, "required": ["snapshotLocalId", "kind", "name", "position", "references", "state"],
+      "properties": { "snapshotLocalId": { "type": "string", "minLength": 1 }, "kind": { "$ref": "#/$defs/stringField" }, "name": { "$ref": "#/$defs/stringField" }, "position": { "$ref": "#/$defs/positionField" }, "references": { "type": "array", "items": { "$ref": "#/$defs/reference" } }, "state": { "$ref": "#/$defs/stringField" } }
+    },
+    "world": {
+      "type": "object", "additionalProperties": false,
+      "required": ["families", "guilds", "settlements", "workers", "facilities", "structures", "containers", "itemSlots", "equipment", "mapObjects", "workState", "dungeons", "camps", "invaders", "oilRigs", "supplySystems"],
+      "properties": {
+        "families": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["family", "state", "warningCode"], "properties": { "family": { "type": "string" }, "state": { "type": "string", "enum": ["present", "absent", "unknown", "unsupported", "malformed"] }, "warningCode": { "type": ["string", "null"] } } } },
+        "guilds": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "settlements": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "workers": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "facilities": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "structures": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "containers": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "itemSlots": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "equipment": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "mapObjects": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "workState": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "dungeons": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "camps": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "invaders": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "oilRigs": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }, "supplySystems": { "type": "array", "items": { "$ref": "#/$defs/worldEntity" } }
       }
     }
   }
