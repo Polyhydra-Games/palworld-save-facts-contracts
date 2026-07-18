@@ -13,7 +13,7 @@
     "completeness",
     "warnings",
     "domainCounts",
-    "players"
+    "players", "pals"
   ],
   "properties": {
     "schemaVersion": { "const": "palworld-save-facts/v2" },
@@ -53,6 +53,10 @@
     "players": {
       "type": "array",
       "items": { "$ref": "#/$defs/player" }
+    },
+    "pals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pal" }
     }
   },
   "$defs": {
@@ -95,6 +99,17 @@
         "technology": { "$ref": "#/$defs/stringListField" }, "recipes": { "$ref": "#/$defs/stringListField" }, "quests": { "$ref": "#/$defs/stringListField" },
         "lastOnline": { "$ref": "#/$defs/timestampField" }, "inventoryReferences": { "type": "array", "items": { "$ref": "#/$defs/reference" } },
         "equipmentReferences": { "type": "array", "items": { "$ref": "#/$defs/reference" } }, "position": { "$ref": "#/$defs/positionField" }, "state": { "$ref": "#/$defs/stringField" }
+      }
+    },
+    "pal": {
+      "type": "object", "additionalProperties": false,
+      "required": ["snapshotLocalId", "nativeId", "species", "nickname", "owner", "ownershipObservedAt", "firstObservedAt", "level", "experience", "rank", "gender", "traits", "ivStats", "souls", "passiveSkills", "activeSkills", "vitals", "workSuitability", "container", "slot", "party", "palbox", "base", "guild"],
+      "properties": {
+        "snapshotLocalId": { "type": "string", "minLength": 1 },
+        "nativeId": { "$ref": "#/$defs/stringField" }, "species": { "$ref": "#/$defs/stringField" }, "nickname": { "$ref": "#/$defs/stringField" }, "owner": { "$ref": "#/$defs/stringField" },
+        "ownershipObservedAt": { "$ref": "#/$defs/timestampField" }, "firstObservedAt": { "$ref": "#/$defs/timestampField" }, "level": { "$ref": "#/$defs/integerField" }, "experience": { "$ref": "#/$defs/integerField" }, "rank": { "$ref": "#/$defs/integerField" }, "gender": { "$ref": "#/$defs/stringField" }, "traits": { "$ref": "#/$defs/stringListField" }, "ivStats": { "type": "object", "additionalProperties": { "$ref": "#/$defs/integerField" } }, "souls": { "$ref": "#/$defs/integerField" }, "passiveSkills": { "$ref": "#/$defs/stringListField" }, "activeSkills": { "$ref": "#/$defs/stringListField" },
+        "vitals": { "type": "object", "additionalProperties": false, "required": ["health", "sanity", "hunger", "friendship"], "properties": { "health": { "$ref": "#/$defs/integerField" }, "sanity": { "$ref": "#/$defs/integerField" }, "hunger": { "$ref": "#/$defs/integerField" }, "friendship": { "$ref": "#/$defs/integerField" } } },
+        "workSuitability": { "$ref": "#/$defs/stringListField" }, "container": { "$ref": "#/$defs/stringField" }, "slot": { "$ref": "#/$defs/integerField" }, "party": { "$ref": "#/$defs/stringField" }, "palbox": { "$ref": "#/$defs/stringField" }, "base": { "$ref": "#/$defs/stringField" }, "guild": { "$ref": "#/$defs/stringField" }
       }
     }
   }

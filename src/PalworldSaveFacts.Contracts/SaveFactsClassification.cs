@@ -76,6 +76,38 @@ public sealed record SaveFactsPlayerV2(
     [property: JsonPropertyName("position"), FactClassification(FactSensitivity.Restricted)] SaveFactsPositionFieldV1 Position,
     [property: JsonPropertyName("state"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 State);
 
+public sealed record SaveFactsPalVitalsV1(
+    [property: JsonPropertyName("health"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Health,
+    [property: JsonPropertyName("sanity"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Sanity,
+    [property: JsonPropertyName("hunger"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Hunger,
+    [property: JsonPropertyName("friendship"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Friendship);
+
+public sealed record SaveFactsPalV2(
+    [property: JsonPropertyName("snapshotLocalId"), FactClassification(FactSensitivity.Operator)] string SnapshotLocalId,
+    [property: JsonPropertyName("nativeId"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 NativeId,
+    [property: JsonPropertyName("species"), FactClassification(FactSensitivity.Operator)] SaveFactsStringFieldV1 Species,
+    [property: JsonPropertyName("nickname"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Nickname,
+    [property: JsonPropertyName("owner"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Owner,
+    [property: JsonPropertyName("ownershipObservedAt"), FactClassification(FactSensitivity.Restricted)] SaveFactsTimestampFieldV1 OwnershipObservedAt,
+    [property: JsonPropertyName("firstObservedAt"), FactClassification(FactSensitivity.Operator)] SaveFactsTimestampFieldV1 FirstObservedAt,
+    [property: JsonPropertyName("level"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Level,
+    [property: JsonPropertyName("experience"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Experience,
+    [property: JsonPropertyName("rank"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Rank,
+    [property: JsonPropertyName("gender"), FactClassification(FactSensitivity.Operator)] SaveFactsStringFieldV1 Gender,
+    [property: JsonPropertyName("traits"), FactClassification(FactSensitivity.Operator)] SaveFactsStringListFieldV1 Traits,
+    [property: JsonPropertyName("ivStats"), FactClassification(FactSensitivity.Operator)] IReadOnlyDictionary<string, SaveFactsIntegerFieldV1> IvStats,
+    [property: JsonPropertyName("souls"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Souls,
+    [property: JsonPropertyName("passiveSkills"), FactClassification(FactSensitivity.Operator)] SaveFactsStringListFieldV1 PassiveSkills,
+    [property: JsonPropertyName("activeSkills"), FactClassification(FactSensitivity.Operator)] SaveFactsStringListFieldV1 ActiveSkills,
+    [property: JsonPropertyName("vitals"), FactClassification(FactSensitivity.Operator)] SaveFactsPalVitalsV1 Vitals,
+    [property: JsonPropertyName("workSuitability"), FactClassification(FactSensitivity.Operator)] SaveFactsStringListFieldV1 WorkSuitability,
+    [property: JsonPropertyName("container"), FactClassification(FactSensitivity.Operator)] SaveFactsStringFieldV1 Container,
+    [property: JsonPropertyName("slot"), FactClassification(FactSensitivity.Operator)] SaveFactsIntegerFieldV1 Slot,
+    [property: JsonPropertyName("party"), FactClassification(FactSensitivity.Operator)] SaveFactsStringFieldV1 Party,
+    [property: JsonPropertyName("palbox"), FactClassification(FactSensitivity.Operator)] SaveFactsStringFieldV1 Palbox,
+    [property: JsonPropertyName("base"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Base,
+    [property: JsonPropertyName("guild"), FactClassification(FactSensitivity.Restricted)] SaveFactsStringFieldV1 Guild);
+
 public sealed record SaveFactsWarningV1(
     [property: JsonPropertyName("code"), FactClassification(FactSensitivity.Operator)] string Code,
     [property: JsonPropertyName("message"), FactClassification(FactSensitivity.Operator)] string Message);
@@ -101,7 +133,8 @@ public sealed record SaveFactsDocumentV2(
     [property: JsonPropertyName("completeness"), FactClassification(FactSensitivity.Operator)] SaveFactsCompletenessState Completeness,
     [property: JsonPropertyName("warnings"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsWarningV1> Warnings,
     [property: JsonPropertyName("domainCounts"), FactClassification(FactSensitivity.Operator)] IReadOnlyDictionary<string, int> DomainCounts,
-    [property: JsonPropertyName("players"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsPlayerV2> Players);
+    [property: JsonPropertyName("players"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsPlayerV2> Players,
+    [property: JsonPropertyName("pals"), FactClassification(FactSensitivity.Operator)] IReadOnlyList<SaveFactsPalV2> Pals);
 
 public sealed record SaveFactsDecodeManifestV1(
     [property: JsonPropertyName("schemaVersion"), FactClassification(FactSensitivity.Public)] string SchemaVersion,
