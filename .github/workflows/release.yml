@@ -40,14 +40,14 @@ jobs:
         with:
           name: release-assets
           path: release
-      - name: Publish to NuGet.org
+      - name: Publish to internal BaGet feed
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          BAGET_API_KEY: ${{ secrets.BAGET_API_KEY }}
         run: |
-          test -n "$NUGET_API_KEY"
+          test -n "$BAGET_API_KEY"
           mapfile -t packages < <(find release -type f -name '*.nupkg' | sort)
           test "${#packages[@]}" -eq 1
-          dotnet nuget push "${packages[0]}" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
+          dotnet nuget push "${packages[0]}" --source https://nuget.polyhydragames.com/v3/index.json --api-key "$BAGET_API_KEY" --skip-duplicate
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag }}
