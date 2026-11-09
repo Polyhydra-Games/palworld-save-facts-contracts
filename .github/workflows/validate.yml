@@ -3,7 +3,7 @@ name: Validate
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [dev, main]
 
 permissions:
   contents: read
@@ -20,4 +20,9 @@ jobs:
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
+      - name: Test contracts
+        run: |
+          dotnet restore PalworldSaveFacts.Contracts.sln
+          dotnet build PalworldSaveFacts.Contracts.sln -c Release --no-restore
+          dotnet test PalworldSaveFacts.Contracts.sln -c Release --no-build
       - run: dotnet pack PalworldSaveFacts.Contracts.sln -c Release -o ./artifacts
